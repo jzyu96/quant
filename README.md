@@ -1,10 +1,10 @@
 # quant
 Quantitative trading algorithm, hopefully
 
-Written in C++ by James Yu, Vinny Xu, and Robert Wang
-jzyu96@gmail.com
-vincenthanyangxu@yahoo.com
-bobwang15@outlook.com
+Created by:
+- James Yu (jzyu96@gmail.com)
+- Vincent Xu (vincenthanyangxu@yahoo.com)
+- Robert Wang (bobwang15@outlook.com)
 
 Components:
 - Research Engine:
@@ -12,6 +12,7 @@ Components:
 	- (Adjusted) EBITDA [?]
 	- Gross margin [?]
 	- Revenue-time correlation
+	- HTTP Request from macrotrends.net
 - Portfolio Construction Algorithm:
 	- 
 	-

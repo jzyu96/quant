@@ -1,0 +1,44 @@
+An initial map of how the research engine will function.
+
+Each ticker to be researched will pass on a set of information to the portfolio management algorithm.
+
+	Returns
+Struct/Object:
+- Ticker
+- Strength Number
+- Risk/Volatility Number
+- Liquidity [???]
+-
+
+Pseudocode
+Input: Ticker
+
+Collect Data:
+- Past pricing info
+- Financials [10k 10q ??]
+
+Determining Strength Number:
+
+
+
+Determining Risk/Volatility Number: 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
