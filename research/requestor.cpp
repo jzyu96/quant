@@ -6,44 +6,38 @@
 
 #include <iostream>
 #include <string>
-#include <Poco/URI.h>
-#include <Poco/Net/HTTPClientSession.h>
-#include <Poco/Net/HTTPRequest.h>
-#include <Poco/Net/HTTPResponse.h>
-#include <Poco/Net/HTTPMessage.h>
+#include <curl/curl.h>
 
 using namespace std;
-using namespace Poco;
-using namespace Poco::Net;
+
+static size_t WriteCallback(void *contents, size_t size, size_t nmemb, void *userp) {
+	((string*)userp)->append((char*)contents, size * nmemb);
+	return size * nmemb;
+}
+
+string constructURL(string ticker) {
+	return "https://www.macrotrends.net/stocks/charts/" + ticker;
+}
 
 void request(string ticker) {
-	// Create URI
-	URI uri("http://httpbin.org");
+	CURL *curl;
+	CURLcode resp;
+	string readBuffer;
+	string url = "https://www.macrotrends.net/stocks/charts/ASO/academy-sports-and-outdoors/financial-statements";	
 
-	// Create a session
-	HTTPClientSession session(uri.getHost(), uri.getPort());
+	curl = curl_easy_init();
+	if (curl) {
+		curl_easy_setopt(curl, CURLOPT_URL, url.c_str());
+		curl_easy_setopt(curl, CURLOPT_WRITEFUNCTION, WriteCallback);
+		curl_easy_setopt(curl, CURLOPT_WRITEDATA, &readBuffer);
+		resp = curl_easy_perform(curl);
+		curl_easy_cleanup(curl);
 
-	// Set connection to keepalive
-	session.setKeepAlive(true);
-
-	// Choose the http request method
-	HTTPRequest request(HTTPRequest::HTTP_GET, "/", HTTPMessage::HTTP_1_1);
-
-	// Add headers
-	
-	// Send the request
-	session.sendRequest(request);
-
-	// Receive response
-	HTTPResponse response;
-	istream &page = session.receiveResponse(response);
-
-	// Print the status code
-	cout << response.getStatus() << endl;
-
-	// Lets compile and start wireshark
-
+		cout << readBuffer << endl;
+	}
 }
+
+
 
 
 
