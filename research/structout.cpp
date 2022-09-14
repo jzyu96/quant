@@ -14,10 +14,10 @@ struct security {
 	double risk;
 };
 
-security construct(string ticker) {
+security construct(string ticker, string name) {
 	security sec;
 	
-	request(ticker);	
+	requestPrices(ticker, name);	
 
 	sec.ticker = ticker;
 	sec.strength = 0.0;

@@ -3,7 +3,7 @@
 
 int main() {
 
-	security sec = construct("AAPL");
+	security sec = construct("AAPL", "apple");
 	std::cout << sec.ticker  << "\n";
 
 	return 0;
