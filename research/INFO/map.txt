@@ -18,6 +18,10 @@ Collect Data:
 - Past pricing info
 - Financials [10k 10q ??]
 
+- Includes an HTTP request to macrotrends.net for financial statements. Will
+	autoparse the needed material and return as several different lists.
+- Pricing information may need to be uploaded manually as a csv file.
+
 Determining Strength Number:
 
 

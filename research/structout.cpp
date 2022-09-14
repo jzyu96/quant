@@ -17,7 +17,7 @@ struct security {
 security construct(string ticker, string name) {
 	security sec;
 	
-	requestPrices(ticker, name);	
+	requestFS(ticker, name);	
 
 	sec.ticker = ticker;
 	sec.strength = 0.0;
