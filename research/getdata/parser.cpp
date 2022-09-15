@@ -161,9 +161,53 @@ char* pricingParser(string dataStr) {
 	return priceData;
 }
 
+/* listFromKey: takes a key, namely "date", "open", "high", "close", "low", "volume", or
+ * 		"adjclose" and creates a list out of the larger data set, including only 
+ * 		the necessary data
+ * 
+ * param "keyword": the keyword of the field of data to be extracted
+ * param "dataStr": the overall data (in string form) to be parsed
+ *
+ * returns: a list of data for the given field
+ */
+double* listFromKey(string keyword, string dataStr) {
+	const char* key = keyword.c_str();
+	const char* data = dataStr.c_str();
+	int keylen = strlen(key);
+	int i = 0, n = 0;
 
+	double* list = (double *)malloc(sizeof(double) * 2000);
+	if (list == NULL) {
+		throw "listFromKey: Error, unable to malloc";
+	}
 
+	while (data[i] != ']') {
+		if (data[i] == '{') {
+			bool atKey = false;
+			string num = "";
+			while (! atKey) {
+				for (int j = 0; j < keylen; j++) {
+					if (data[i + j] != key[j]) {
+						break;
+					} else if (j == keylen - 1) {
+						atKey = true;
+						i += j + 2;
+					}
+				}
+				i += 1;
+			}
+			while (data[i] != ',' && data[i] != '}') {
+				num += data[i];
+				i += 1;
+			}
+			list[n] = stod(num);
+			n += 1;
+		}
+		i += 1;
+	}
 
+	return list;
+}
 
 
 

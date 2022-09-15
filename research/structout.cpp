@@ -41,9 +41,11 @@ security construct(string ticker, string name) {
 
 	string PricesData = requestPrices(ticker);
 
-	PricesData = pricingParser(PricesData);	
+	PricesData = pricingParser(PricesData);
 
-	cout << PricesData << endl;
+	double* openData = listFromKey("open", PricesData);	
+
+	cout << openData[0] << endl;
 
 	sec.ticker = ticker;
 	sec.strength = 0.0;
