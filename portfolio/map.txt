@@ -1,0 +1,13 @@
+An initial map of how the portfolio construction and implementation algorithm will work.
+
+Inputs: An acceptable level of risk in the construction of this portfolio
+Feed: Different tickers, from the research engine. Each ticker will be accompanied by two numbers, a strength number
+(an indicator of whether research believes it will grow in price), and a risk/volatility number. 
+
+
+Pseudocode:
+A sorting algorithm should take each given ticker, and arrange in a linked list or dynamically allocated array
+by strength number; strongest first, weakest last. 
+
+
+

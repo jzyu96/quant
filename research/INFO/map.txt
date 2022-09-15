@@ -1,0 +1,49 @@
+An initial map of how the research engine will function.
+
+Each ticker to be researched will pass on a set of information to the portfolio management algorithm.
+
+	Returns
+Struct/Object:
+- Ticker
+- Strength Number
+- Risk/Volatility Number
+- Liquidity [???]
+-
+
+Pseudocode
+Input: Ticker
+
+Collect Data:
+- HTTP request to a webpage : macrotrends.net
+- Past pricing info
+- Financials [10k 10q ??]
+
+- Includes an HTTP request to macrotrends.net for financial statements. Will
+	autoparse the needed material and return as several different lists.
+- Pricing information may need to be uploaded manually as a csv file.
+
+Determining Strength Number:
+
+
+
+Determining Risk/Volatility Number: 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
