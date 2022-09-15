@@ -64,6 +64,62 @@ char* extractOriginalData(string readBuffer) {
 	return origData;
 }
 
+/* separateField: a function that tears off a chunk of a larger string as a separated field
+ *
+ * param "keywordStr": the name of the section to be torn off
+ * param "originalData": the originalData input
+ *
+ * returns: the section of the original data input with the header == keyword
+ */
+char* separateField(string keywordStr, string originalData) {
+	const char* origData = originalData.c_str();
+	const char* keyword = keywordStr.c_str();
+	char* sepField = (char *)malloc(sizeof(char) * 9999);
+	int i = 0, j = 0;
+	int len = strlen(keyword);
+	bool atField = false, atData = false;
+
+	while (! atField) {
+		for (int n = 0; n < len; n++) {
+			if (keyword[n] != origData[i + n]) {
+				break;
+			} else if (n == len - 1 && keyword[n] == origData[i + n]) {
+				atField = true;
+			}
+		}
+		i += 1;
+	}
+
+	while (! atData) {
+		if (origData[i] == 'd' && origData[i + 2] == 'v' && origData[i + 3] == '>' && origData[i + 5] == ',') {
+			atData = true;
+			i += 6;
+		} else {
+			i += 1;
+		}
+	}
+
+	for (int k = 0; k < len; k++) {
+		sepField[j] = keyword[k];
+		j += 1;
+	}
+
+	sepField[j] = ':';
+	sepField[j + 1] = ' ';
+	j += 2;
+
+	while (origData[i] != '}') {
+		sepField[j] = origData[i];
+		j += 1;
+		i += 1;
+	}
+
+	sepField[j] = '\0';
+	return sepField;
+}
+	
+
+
 /* parseToString: a function that takes an unparsed chunk of text (originalData),
  *				  and parses it into a cleaned string representing the given company's
  *				  financial statements
@@ -74,12 +130,13 @@ char* extractOriginalData(string readBuffer) {
  * 		"Revenue; date:num, date:num, ... | GrossProfit; date:num, date:num, ... "
  */
 string parseToString(string origData) {
+	// Revenue, Gross Profit, EBITDA, Basic EPS	
+	string rev(separateField("Revenue", origData));
+	string gp(separateField("Gross Profit", origData));
+	string ebitda(separateField("EBITDA", origData));
+	string bEPS(separateField("Basic EPS", origData));	
 	
-
-
-
-
-	return "parsed";
+	return rev + "|" + gp + "|" + ebitda + "|" + bEPS;
 }
 
 /* requestFS: formulates and sends an HTTP request via cURL
@@ -106,7 +163,7 @@ string requestFS(string ticker, string name) {
 		originalData = extractOriginalData(readBuffer);
 		parsedData = parseToString(originalData);
 
-		cout << originalData << endl;
+		cout << parsedData << endl;
 	}
 
 	return parsedData;
