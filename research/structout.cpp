@@ -30,9 +30,10 @@ security construct(string ticker, string name) {
 	string revDataStr = separateField("Revenue", FSorigData);
 	cout << revDataStr << endl;
 
-	double* revData = strToList(revDataStr); 
-	
-	for (int i = 0; i < 13; i++) {
+	int len;
+	double* revData = strToList(revDataStr, &len); 	
+
+	for (int i = 0; i < len; i++) {
 		cout << revData[i] << endl;
 	}
 
