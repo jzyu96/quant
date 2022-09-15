@@ -34,6 +34,9 @@ double* strToList(string data, int *num) {
 				num += data[j];
 				j += 1;
 			}
+			if (num == "") {
+				num = "0.0";
+			}
 			dataList[k] = stod(num);
 			k += 1;
 		} else {

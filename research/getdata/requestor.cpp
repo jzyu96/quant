@@ -28,7 +28,7 @@ static size_t WriteCallback(void *contents, size_t size, size_t nmemb, void *use
  * returns: URL as described above
  */
 string constructFSURL(string ticker, string name) {
-	return "https://www.macrotrends.net/stocks/charts/" + ticker + "/" + name + "/financial-statements";
+	return "https://www.macrotrends.net/stocks/charts/" + ticker + "/" + name + "/financial-statements?freq=Q";
 }
 
 /* requestFS: formulates and sends an HTTP request via cURL
