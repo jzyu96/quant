@@ -36,12 +36,12 @@ string constructFSURL(string ticker, string name) {
  * param "ticker": the ticker of a given security
  * param "name": the name of a given security
  * 
- * returns: a string representing the parsed data
+ * returns: a string representing unparsed data
  */
 string requestFS(string ticker, string name) {
 	CURL *curl;
 	CURLcode resp;
-	string readBuffer, originalData, parsedData;
+	string readBuffer;
 	string url = constructFSURL(ticker, name);	
 
 	curl = curl_easy_init();
@@ -54,6 +54,50 @@ string requestFS(string ticker, string name) {
 	}
 	return readBuffer;
 }
+
+/* constructPricesURL: takes the ticker of the given company and construct the URL of the historical prices
+ * page for the company on yahoo finance. Daily prices for the past 5 years.
+ *
+ * param "ticker": ticker of the given company
+ *
+ * returns: a string equal to the url of the yahoo finance historical pricing page
+ */
+string constructPricesURL(string ticker) {
+	return "https://finance.yahoo.com/quote/" + ticker + "/history?period1=1505347200&period2=1663113600&interval=1d&filter=history&frequency=1d&includeAdjustedClose=true";
+}
+
+/* requestPrices: formulates and sends an HTTP request to yahoo finance via cURL
+ *
+ * param "ticker": the ticker of a given security
+ *
+ * returns: a string representing unparsed pricing data
+ */
+string requestPrices(string ticker) {
+	CURL *curl;
+	CURLcode resp;
+	string readBuffer;
+	string url = constructPricesURL(ticker);
+
+	curl = curl_easy_init();
+	if (curl) {
+		curl_easy_setopt(curl, CURLOPT_URL, url.c_str());
+		curl_easy_setopt(curl, CURLOPT_WRITEFUNCTION, WriteCallback);
+		curl_easy_setopt(curl, CURLOPT_WRITEDATA, &readBuffer);
+		resp = curl_easy_perform(curl);
+		curl_easy_cleanup(curl);
+	}
+	return readBuffer;
+}
+
+
+
+
+
+
+
+
+
+
 
 
 

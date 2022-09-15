@@ -20,7 +20,8 @@ struct security {
 
 security construct(string ticker, string name) {
 	security sec;
-	
+
+	/*	
 	string FSorigData = requestFS(ticker, name);
 	FSorigData = extractOriginalData(FSorigData);
 
@@ -36,6 +37,10 @@ security construct(string ticker, string name) {
 	for (int i = 0; i < len; i++) {
 		cout << revData[i] << endl;
 	}
+	*/
+
+	string PricesData = requestPrices(ticker);
+	cout << PricesData << endl;
 
 	sec.ticker = ticker;
 	sec.strength = 0.0;
