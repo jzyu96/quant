@@ -119,6 +119,61 @@ string parseToString(string origData) {
 	return rev + "|" + gp + "|" + ebitda + "|" + bEPS;
 }
 
+/* pricingParser: a function whose aim is to take the http response from requestPrices and parse it
+ *
+ * param "dataStr": an unparsed, uncleaned string to be parsed and cleaned by this function
+ *
+ * returns: parsed, cleaned string of pricing history
+ */
+char* pricingParser(string dataStr) {
+	const char* data = dataStr.c_str();
+	int len = strlen(data);	
+	int i = 0, j = 0;
+	
+	char* priceData = (char *)malloc(sizeof(char) * len);
+	if (priceData == NULL) {
+		throw "pricingParser: Error, unable to malloc";
+	}
+
+	bool atEnd = false, atBeginning = false;
+	while (! atBeginning) {
+	       if (data[i] == '{' && data[i + 1] == '"' && data[i + 2] == 'p' && data[i + 7] == 's') {
+			atBeginning == true;
+			i += 10;
+			break;
+		} else {
+			i += 1;
+		}
+	}
+
+	while (! atEnd) {
+		if (data[i] == ',' && data[i + 1] == '"' && data[i + 2] == 'i' && data[i + 4] == 'P' && data[i + 5] == 'e') {
+			atEnd = true;
+		} else {	
+			priceData[j] = data[i];
+			i += 1;
+			j += 1;
+		}
+	}
+
+	priceData[j] = '\0';
+
+	return priceData;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 

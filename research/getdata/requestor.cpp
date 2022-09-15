@@ -77,6 +77,7 @@ string requestPrices(string ticker) {
 	CURLcode resp;
 	string readBuffer;
 	string url = constructPricesURL(ticker);
+	// string url = "https://finance.yahoo.com/quote/HUT/history?period1=1663027200&period2=1663113600&interval=1d&filter=history&frequency=1d&includeAdjustedClose=true";
 
 	curl = curl_easy_init();
 	if (curl) {

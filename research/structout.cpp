@@ -40,6 +40,9 @@ security construct(string ticker, string name) {
 	*/
 
 	string PricesData = requestPrices(ticker);
+
+	PricesData = pricingParser(PricesData);	
+
 	cout << PricesData << endl;
 
 	sec.ticker = ticker;
