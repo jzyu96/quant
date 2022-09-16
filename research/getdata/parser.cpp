@@ -19,11 +19,14 @@ char* extractOriginalData(string readBuffer) {
 	const char* reader = readBuffer.c_str();
 	int i = 0, n = 0;
 	bool atData = false;
+
+	// memory allocation for original data string
 	char* origData = (char *)malloc(sizeof(char) * 99999);
 	if (origData == NULL) {
 		throw "extractOriginalData: Error, unable to malloc";
 	}
 
+	// finds the start of the Original Data field in the HTTP response
 	while (! atData) {
 		if (reader[i] == 'o' && reader[i + 8] == 'D' && reader[i + 15] == '[') {
 			i += 16;
@@ -33,12 +36,14 @@ char* extractOriginalData(string readBuffer) {
 		}
 	}
 
+	// copies the original data string to own string
 	while (reader[i] != ']') {
 		origData[n] = reader[i];
 		n += 1;
 		i += 1;
 	}
 
+	// tack on sentinel character and return the string
 	origData[n] = '\0';
 	return origData;
 }
@@ -53,14 +58,18 @@ char* extractOriginalData(string readBuffer) {
 char* separateField(string keywordStr, string originalData) {
 	const char* origData = originalData.c_str();
 	const char* keyword = keywordStr.c_str();
+
+	// memory allocation for separating a specified field (as a string)
 	char* sepField = (char *)malloc(sizeof(char) * 9999);
 	if (sepField == NULL) {
 		throw "separateField: Error, unable to malloc";
 	}
+
 	int i = 0, j = 0;
 	int len = strlen(keyword);
 	bool atField = false, atData = false;
 
+	// finds the beginning of the field in question
 	while (! atField) {
 		for (int n = 0; n < len; n++) {
 			if (keyword[n] != origData[i + n]) {
@@ -72,6 +81,7 @@ char* separateField(string keywordStr, string originalData) {
 		i += 1;
 	}
 
+	// finds the start of the actual useful data entries
 	while (! atData) {
 		if (origData[i] == 'd' && origData[i + 2] == 'v' && origData[i + 3] == '>' && origData[i + 5] == ',') {
 			atData = true;
@@ -81,21 +91,25 @@ char* separateField(string keywordStr, string originalData) {
 		}
 	}
 
+	// copies field name into own string
 	for (int k = 0; k < len; k++) {
 		sepField[j] = keyword[k];
 		j += 1;
 	}
 
+	// formatting
 	sepField[j] = ';';
 	sepField[j + 1] = ' ';
 	j += 2;
 
+	// copies data entries into own string
 	while (origData[i] != '}') {
 		sepField[j] = origData[i];
 		j += 1;
 		i += 1;
 	}
 
+	// tack on sentinel character and return
 	sepField[j] = '\0';
 	return sepField;
 }
@@ -116,6 +130,7 @@ string parseToString(string origData) {
 	string ebitda(separateField("EBITDA", origData));
 	string bEPS(separateField("Basic EPS", origData));	
 	
+	// return formatted string of all major financial statement fields	
 	return rev + "|" + gp + "|" + ebitda + "|" + bEPS;
 }
 
@@ -129,13 +144,15 @@ char* pricingParser(string dataStr) {
 	const char* data = dataStr.c_str();
 	int len = strlen(data);	
 	int i = 0, j = 0;
+	bool atEnd = false, atBeginning = false;
 	
+	// memory allocation for price data
 	char* priceData = (char *)malloc(sizeof(char) * len);
 	if (priceData == NULL) {
 		throw "pricingParser: Error, unable to malloc";
 	}
 
-	bool atEnd = false, atBeginning = false;
+	// finds the beginning of the pricing history data
 	while (! atBeginning) {
 	       if (data[i] == '{' && data[i + 1] == '"' && data[i + 2] == 'p' && data[i + 7] == 's') {
 			atBeginning == true;
@@ -146,6 +163,7 @@ char* pricingParser(string dataStr) {
 		}
 	}
 
+	// copies pricing history data into own string until the end of the data
 	while (! atEnd) {
 		if (data[i] == ',' && data[i + 1] == '"' && data[i + 2] == 'i' && data[i + 4] == 'P' && data[i + 5] == 'e') {
 			atEnd = true;
@@ -156,58 +174,12 @@ char* pricingParser(string dataStr) {
 		}
 	}
 
+	// tack on sentinel character and return pricing data
 	priceData[j] = '\0';
-
 	return priceData;
 }
 
-/* listFromKey: takes a key, namely "date", "open", "high", "close", "low", "volume", or
- * 		"adjclose" and creates a list out of the larger data set, including only 
- * 		the necessary data
- * 
- * param "keyword": the keyword of the field of data to be extracted
- * param "dataStr": the overall data (in string form) to be parsed
- *
- * returns: a list of data for the given field
- */
-double* listFromKey(string keyword, string dataStr) {
-	const char* key = keyword.c_str();
-	const char* data = dataStr.c_str();
-	int keylen = strlen(key);
-	int i = 0, n = 0;
 
-	double* list = (double *)malloc(sizeof(double) * 2000);
-	if (list == NULL) {
-		throw "listFromKey: Error, unable to malloc";
-	}
-
-	while (data[i] != ']') {
-		if (data[i] == '{') {
-			bool atKey = false;
-			string num = "";
-			while (! atKey) {
-				for (int j = 0; j < keylen; j++) {
-					if (data[i + j] != key[j]) {
-						break;
-					} else if (j == keylen - 1) {
-						atKey = true;
-						i += j + 2;
-					}
-				}
-				i += 1;
-			}
-			while (data[i] != ',' && data[i] != '}') {
-				num += data[i];
-				i += 1;
-			}
-			list[n] = stod(num);
-			n += 1;
-		}
-		i += 1;
-	}
-
-	return list;
-}
 
 
 

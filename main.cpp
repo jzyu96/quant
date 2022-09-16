@@ -1,5 +1,5 @@
 #include <iostream>
-#include "research/structout.cpp"
+#include "research/constructor.cpp"
 
 using namespace std;
 
