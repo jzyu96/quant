@@ -18,7 +18,10 @@ struct security {
 	double risk;
 };
 
-security construct(string ticker, string name) {
+/* construct: takes a ticker, company name, and the current date and constructs
+ * 			  a struct representing the company that includes the ticker, strength, and risk
+ */
+security construct(string ticker, string name, string date) {
 	security sec;
 
 	/*	
@@ -39,7 +42,7 @@ security construct(string ticker, string name) {
 	}
 	*/
 
-	string PricesData = requestPrices(ticker);
+	string PricesData = requestPrices(ticker, date);
 
 	PricesData = pricingParser(PricesData);
 

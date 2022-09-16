@@ -9,6 +9,8 @@
 #include <cstring>
 #include <curl/curl.h>
 
+#include "calendarfunctions.cpp"
+
 using namespace std;
 
 /* WriteCallback is a transparent function to the user; its purpose is to record the
@@ -62,22 +64,28 @@ string requestFS(string ticker, string name) {
  *
  * returns: a string equal to the url of the yahoo finance historical pricing page
  */
-string constructPricesURL(string ticker) {
-	return "https://finance.yahoo.com/quote/" + ticker + "/history?period1=1505347200&period2=1663113600&interval=1d&filter=history&frequency=1d&includeAdjustedClose=true";
+string constructPricesURL(string ticker, string d) {
+	date today = stringToDate(d);
+	date fivePrior = today;
+	fivePrior.year -= 5;
+	string URL = "https://finance.yahoo.com/quote/" + ticker + "/history?period1=" +
+				to_string(dateToSeconds(fivePrior)) + "&period2=" +
+				to_string(dateToSeconds(today)) + "&interval=1d&filter=history&frequency=1d&includeAdjustedClose=true";
+	return URL;
 }
 
 /* requestPrices: formulates and sends an HTTP request to yahoo finance via cURL
  *
  * param "ticker": the ticker of a given security
+ * param "today": a string representing the current date
  *
  * returns: a string representing unparsed pricing data
  */
-string requestPrices(string ticker) {
+string requestPrices(string ticker, string today) {
 	CURL *curl;
 	CURLcode resp;
 	string readBuffer;
-	string url = constructPricesURL(ticker);
-	// string url = "https://finance.yahoo.com/quote/HUT/history?period1=1663027200&period2=1663113600&interval=1d&filter=history&frequency=1d&includeAdjustedClose=true";
+	string url = constructPricesURL(ticker, today);
 
 	curl = curl_easy_init();
 	if (curl) {
