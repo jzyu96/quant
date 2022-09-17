@@ -21,46 +21,60 @@ static size_t WriteCallback(void *contents, size_t size, size_t nmemb, void *use
 	return size * nmemb;
 }
 
-/* constructFSURL: takes the ticker and the name and constructs the URL of the financial-statements page
- * of the given company on macrotrends.net
+/* constructISURL: takes the ticker and the name and constructs the URL of the financial-statements, income statement
+ * page of the given company on macrotrends.net
  *
  * param "ticker": ticker of the given security
  * param "name": name of the given security
  * 
  * returns: URL as described above
  */
-string constructFSURL(string ticker, string name) {
+string constructISurl(string ticker, string name) {
 	return "https://www.macrotrends.net/stocks/charts/" + ticker + "/" + name + "/financial-statements?freq=Q";
 }
 
-/* requestFS: formulates and sends an HTTP request via cURL
+/* constructBSURL: takes the ticker and the name and constructs the URL of the financial-statements, balance sheet
+ * page of the given company on macrotrends.net
  *
- * param "ticker": the ticker of a given security
- * param "name": the name of a given security
+ * param "ticker": ticker of the given security
+ * param "name": name of the given security
  * 
- * returns: a string representing unparsed data
+ * returns: URL as described above
  */
-string requestFS(string ticker, string name) {
-	CURL *curl;
-	CURLcode resp;
-	string readBuffer;
-	string url = constructFSURL(ticker, name);	
+string constructBSurl(string ticker, string name) {
+	return "https://www.macrotrends.net/stocks/charts/" + ticker + "/" + name + "/balance-sheet?freq=Q";
+}
 
-	curl = curl_easy_init();
-	if (curl) {
-		curl_easy_setopt(curl, CURLOPT_URL, url.c_str());
-		curl_easy_setopt(curl, CURLOPT_WRITEFUNCTION, WriteCallback);
-		curl_easy_setopt(curl, CURLOPT_WRITEDATA, &readBuffer);
-		resp = curl_easy_perform(curl);
-		curl_easy_cleanup(curl);
-	}
-	return readBuffer;
+/* constructCFSURL: takes the ticker and the name and constructs the URL of the financial-statements, key financial ratios
+ * page of the given company on macrotrends.net
+ *
+ * param "ticker": ticker of the given security
+ * param "name": name of the given security
+ * 
+ * returns: URL as described above
+ */
+string constructCFSurl(string ticker, string name) {
+	return "https://www.macrotrends.net/stocks/charts/" + ticker + "/" + name + "/cash-flow-statement?freq=Q";
+}
+
+
+/* constructKFRURL: takes the ticker and the name and constructs the URL of the financial-statements, key financial ratios
+ * page of the given company on macrotrends.net
+ *
+ * param "ticker": ticker of the given security
+ * param "name": name of the given security
+ * 
+ * returns: URL as described above
+ */
+string constructKFRurl(string ticker, string name) {
+	return "https://www.macrotrends.net/stocks/charts/" + ticker + "/" + name + "/financial-ratios?freq=Q";
 }
 
 /* constructPricesURL: takes the ticker of the given company and construct the URL of the historical prices
  * page for the company on yahoo finance. Daily prices for the past 5 years.
  *
  * param "ticker": ticker of the given company
+ * param "d": a string representing the date [year-mo-da]
  *
  * returns: a string equal to the url of the yahoo finance historical pricing page
  */
@@ -74,18 +88,16 @@ string constructPricesURL(string ticker, string d) {
 	return URL;
 }
 
-/* requestPrices: formulates and sends an HTTP request to yahoo finance via cURL
+/* request: formulates and sends an HTTP request via cURL
  *
- * param "ticker": the ticker of a given security
- * param "today": a string representing the current date
+ * param "URL": a given URL to be requested
  *
  * returns: a string representing unparsed pricing data
  */
-string requestPrices(string ticker, string today) {
+string request(string url) {
 	CURL *curl;
 	CURLcode resp;
 	string readBuffer;
-	string url = constructPricesURL(ticker, today);
 
 	curl = curl_easy_init();
 	if (curl) {

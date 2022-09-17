@@ -28,6 +28,12 @@ security construct(string ticker, string name, string date) {
 	getPriceHistory(ticker, date, &open, &high, &low, &close, &adjclose, &volume, &returns);
 	getPriceHistory("^GSPC", date, &SNPopen, &SNPhigh, &SNPlow, &SNPclose, &SNPadjclose, &SNPvolume, &SNPreturns);
 
+	
+
+	
+
+
+
 	double momentum = avgToStrength(open);
 	double volatility = beta(returns, SNPreturns);
 
