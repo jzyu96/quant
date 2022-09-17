@@ -6,7 +6,7 @@ using namespace std;
 int main() {
 
 	security sec = construct("TSLA", "tesla", "2022-09-16");
-	count << endl;
+	cout << endl;
 	cout << sec.ticker  << endl;
 	cout << sec.strength << endl;
 	cout << sec.risk << endl;

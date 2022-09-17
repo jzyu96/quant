@@ -47,13 +47,14 @@ double* getReturns(double* open, double* close) {
 void getIncomeStatements(string ticker, string name, double **revenue, double **grossProfit, double **opIncome, double **netIncome, double **EBITDA, int *num) {
     string url = constructISurl(ticker, name);
     string originalData = extractOriginalData(request(url));
+    cout << "made it here" << endl;
     int n;
 
-    *revenue = FSToList(separateField("", originalData);, &n);
-    *grossProfit = FSToList(separateField("", originalData);, &n);
-    *opIncome = FSToList(separateField("", originalData);, &n);
-    *netIncome = FSToList(separateField("", originalData);, &n);
-    *EBITDA = FSToList(separateField("", originalData);, &n);
+    *revenue = FSToList(separateField("Revenue", originalData), &n);
+    *grossProfit = FSToList(separateField("Gross Profit", originalData), &n);
+    *opIncome = FSToList(separateField("Operating Income", originalData), &n);
+    *netIncome = FSToList(separateField("Net Income", originalData), &n);
+    *EBITDA = FSToList(separateField("EBITDA", originalData), &n);
     *num = n;
 }
 
@@ -124,11 +125,11 @@ void getKeyRatios(string ticker, string name, double **curRat, double **debEqu, 
     string originalData = extractOriginalData(request(url));
     int n;
 
-    *curRat = FSToList(separateField("Current Ratio", originalData);, &n);
-    *debEqu = FSToList(separateField("Debt/Equity Ratio", originalData);, &n);
-    *groMar = FSToList(separateField("Gross Margin", originalData);, &n);
-    *netPro = FSToList(separateField("Net Profit", originalData);, &n);
-    *invRat = FSToList(separateField("Inventory Turnover Ratio", originalData);, &n);
+    *curRat = FSToList(separateField("Current Ratio", originalData), &n);
+    *debEqu = FSToList(separateField("Debt/Equity Ratio", originalData), &n);
+    *groMar = FSToList(separateField("Gross Margin", originalData), &n);
+    *netPro = FSToList(separateField("Net Profit", originalData), &n);
+    *invRat = FSToList(separateField("Inventory Turnover Ratio", originalData), &n);
     *num = n;
 }
 
