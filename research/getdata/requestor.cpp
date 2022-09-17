@@ -9,6 +9,8 @@
 #include <cstring>
 #include <curl/curl.h>
 
+#include "calendarfunctions.cpp"
+
 using namespace std;
 
 /* WriteCallback is a transparent function to the user; its purpose is to record the
@@ -19,30 +21,83 @@ static size_t WriteCallback(void *contents, size_t size, size_t nmemb, void *use
 	return size * nmemb;
 }
 
-/* constructFSURL: takes the ticker and the name and constructs the URL of the financial-statements page
- * of the given company on macrotrends.net
+/* constructISURL: takes the ticker and the name and constructs the URL of the financial-statements, income statement
+ * page of the given company on macrotrends.net
  *
  * param "ticker": ticker of the given security
  * param "name": name of the given security
  * 
  * returns: URL as described above
  */
-string constructFSURL(string ticker, string name) {
-	return "https://www.macrotrends.net/stocks/charts/" + ticker + "/" + name + "/financial-statements";
+string constructISurl(string ticker, string name) {
+	return "https://www.macrotrends.net/stocks/charts/" + ticker + "/" + name + "/financial-statements?freq=Q";
 }
 
-/* requestFS: formulates and sends an HTTP request via cURL
+/* constructBSURL: takes the ticker and the name and constructs the URL of the financial-statements, balance sheet
+ * page of the given company on macrotrends.net
  *
- * param "ticker": the ticker of a given security
- * param "name": the name of a given security
+ * param "ticker": ticker of the given security
+ * param "name": name of the given security
  * 
- * returns: a string representing the parsed data
+ * returns: URL as described above
  */
-string requestFS(string ticker, string name) {
+string constructBSurl(string ticker, string name) {
+	return "https://www.macrotrends.net/stocks/charts/" + ticker + "/" + name + "/balance-sheet?freq=Q";
+}
+
+/* constructCFSURL: takes the ticker and the name and constructs the URL of the financial-statements, key financial ratios
+ * page of the given company on macrotrends.net
+ *
+ * param "ticker": ticker of the given security
+ * param "name": name of the given security
+ * 
+ * returns: URL as described above
+ */
+string constructCFSurl(string ticker, string name) {
+	return "https://www.macrotrends.net/stocks/charts/" + ticker + "/" + name + "/cash-flow-statement?freq=Q";
+}
+
+
+/* constructKFRURL: takes the ticker and the name and constructs the URL of the financial-statements, key financial ratios
+ * page of the given company on macrotrends.net
+ *
+ * param "ticker": ticker of the given security
+ * param "name": name of the given security
+ * 
+ * returns: URL as described above
+ */
+string constructKFRurl(string ticker, string name) {
+	return "https://www.macrotrends.net/stocks/charts/" + ticker + "/" + name + "/financial-ratios?freq=Q";
+}
+
+/* constructPricesURL: takes the ticker of the given company and construct the URL of the historical prices
+ * page for the company on yahoo finance. Daily prices for the past 5 years.
+ *
+ * param "ticker": ticker of the given company
+ * param "d": a string representing the date [year-mo-da]
+ *
+ * returns: a string equal to the url of the yahoo finance historical pricing page
+ */
+string constructPricesURL(string ticker, string d) {
+	date today = stringToDate(d);
+	date fivePrior = today;
+	fivePrior.year -= 5;
+	string URL = "https://finance.yahoo.com/quote/" + ticker + "/history?period1=" +
+				to_string(dateToSeconds(fivePrior)) + "&period2=" +
+				to_string(dateToSeconds(today)) + "&interval=1d&filter=history&frequency=1d&includeAdjustedClose=true";
+	return URL;
+}
+
+/* request: formulates and sends an HTTP request via cURL
+ *
+ * param "URL": a given URL to be requested
+ *
+ * returns: a string representing unparsed pricing data
+ */
+string request(string url) {
 	CURL *curl;
 	CURLcode resp;
-	string readBuffer, originalData, parsedData;
-	string url = constructFSURL(ticker, name);	
+	string readBuffer;
 
 	curl = curl_easy_init();
 	if (curl) {
@@ -54,6 +109,16 @@ string requestFS(string ticker, string name) {
 	}
 	return readBuffer;
 }
+
+
+
+
+
+
+
+
+
+
 
 
 
