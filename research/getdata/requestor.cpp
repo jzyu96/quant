@@ -9,7 +9,7 @@
 #include <cstring>
 #include <curl/curl.h>
 
-#include "github.com/jzyu96/quant/auxfunctions/calendarfunctions.cpp"
+#include "calendarfunctions.cpp"
 
 using namespace std;
 
