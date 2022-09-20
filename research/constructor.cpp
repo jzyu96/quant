@@ -15,6 +15,7 @@ using namespace std;
 
 struct security {
 	string ticker;
+	string industry;
 	double strength;
 	double risk;
 };
@@ -33,20 +34,33 @@ security construct(string ticker, string name, string date) {
 	getIncomeStatements(ticker, name, &revenue, &grossProfit, &operatingIncome, &netIncome, &EBITDA, &num);
 	
 
-	
-
-
 
 	double momentum = avgToStrength(open);
 	double volatility = beta(returns, SNPreturns);
 
 	security sec;
 	sec.ticker = ticker;
+	sec.industry = "";
 	sec.strength = momentum;
 	sec.risk = volatility;
 
 	return sec;
 }
+
+/* calcStrength: calculates strength of a security based on industry
+ *
+ * param "industry": string representing the industry of a company
+ * 
+ * returns: a weight scheme for equity strength, depending on the industry
+ */
+
+// Struct for weighting scheme
+struct weight {
+	int momentumMult;
+	int volatilityMult;
+	int marginMult;
+};
+
 
 
 
