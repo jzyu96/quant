@@ -9,7 +9,7 @@
 #include <cstring>
 #include <curl/curl.h>
 
-#include "calendarfunctions.cpp"
+#include "../../aux/calendarfunctions.cpp"
 
 using namespace std;
 

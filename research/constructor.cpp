@@ -10,18 +10,14 @@
 #include "priceanalysis/movingavg.cpp"
 #include "riskanalysis/beta.cpp"
 
+#include "../aux/security.h"
 
 using namespace std;
 
-struct security {
-	string ticker;
-	string industry;
-	double strength;
-	double risk;
-};
-
 /* construct: takes a ticker, company name, and the current date and constructs
  * 			  a struct representing the company that includes the ticker, strength, and risk
+ *
+ * 
  */
 security construct(string ticker, string name, string date) {
 	double *open, *high, *low, *close, *adjclose, *volume, *returns;

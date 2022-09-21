@@ -6,13 +6,9 @@
 #include <iostream>
 #include <string>
 
-using namespace std;
+#include "date.h"
 
-struct date {
-	int year;
-	int month;
-	int day;
-};
+using namespace std;
 
 /* isLeap: boolean function that returns if a year is a leap year
  */

@@ -47,7 +47,6 @@ double* getReturns(double* open, double* close) {
 void getIncomeStatements(string ticker, string name, double **revenue, double **grossProfit, double **opIncome, double **netIncome, double **EBITDA, int *num) {
     string url = constructISurl(ticker, name);
     string originalData = extractOriginalData(request(url));
-    cout << "made it here" << endl;
     int n;
 
     *revenue = FSToList(separateField("Revenue", originalData), &n);
