@@ -9,7 +9,9 @@
 
 #include "priceanalysis/movingavg.cpp"
 #include "riskanalysis/beta.cpp"
+#include "fundamentalanalysis/industrymean.cpp"
 
+#include "../aux/calendarfunctions.cpp"
 #include "../aux/security.h"
 
 using namespace std;
@@ -19,24 +21,35 @@ using namespace std;
  *
  * 
  */
-security construct(string ticker, string name, string date) {
+security construct(string ticker, string name, string industry, string date) {
 	double *open, *high, *low, *close, *adjclose, *volume, *returns;
 	double *SNPopen, *SNPhigh, *SNPlow, *SNPclose, *SNPadjclose, *SNPvolume, *SNPreturns;
 	getPriceHistory(ticker, date, &open, &high, &low, &close, &adjclose, &volume, &returns);
 	getPriceHistory("^GSPC", date, &SNPopen, &SNPhigh, &SNPlow, &SNPclose, &SNPadjclose, &SNPvolume, &SNPreturns);
 
 	double *revenue, *grossProfit, *operatingIncome, *netIncome, *EBITDA;
-	int num;
-	getIncomeStatements(ticker, name, &revenue, &grossProfit, &operatingIncome, &netIncome, &EBITDA, &num);
+	int num1;
+	getIncomeStatements(ticker, name, &revenue, &grossProfit, &operatingIncome, &netIncome, &EBITDA, &num1);
 	
+	double *currentRatio, *debtEquityRatio, *grossMargin, *netProfit, *inventoryTurnoverRatio; 
+	int num2;
+	getKeyRatios(ticker, name, &currentRatio, &debtEquityRatio, &grossMargin, &netProfit, &inventoryTurnoverRatio, &num2);
+
+
+
+
+
 
 
 	double momentum = avgToStrength(open);
 	double volatility = beta(returns, SNPreturns);
 
+
+
 	security sec;
 	sec.ticker = ticker;
 	sec.industry = "";
+	sec.dateAdded = stringToDate(date);
 	sec.strength = momentum;
 	sec.risk = volatility;
 
