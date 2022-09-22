@@ -125,7 +125,7 @@ void getKeyRatios(string ticker, string name, double **curRat, double **debEqu, 
     int n;
 
     *curRat = FSToList(separateField("Current Ratio", originalData), &n);
-    *debEqu = FSToList(separateField("Debt/Equity Ratio", originalData), &n);
+    *debEqu = FSToList(separateField("debt-equity-ratio", originalData), &n);
     *groMar = FSToList(separateField("Gross Margin", originalData), &n);
     *netPro = FSToList(separateField("Net Profit", originalData), &n);
     *invRat = FSToList(separateField("Inventory Turnover Ratio", originalData), &n);

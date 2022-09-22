@@ -11,7 +11,7 @@
 #include "riskanalysis/beta.cpp"
 #include "fundamentalanalysis/industrymean.cpp"
 
-#include "../aux/calendarfunctions.cpp"
+// #include "../aux/calendarfunctions.cpp"
 #include "../aux/security.h"
 
 using namespace std;
@@ -30,12 +30,12 @@ security construct(string ticker, string name, string industry, string date) {
 	double *revenue, *grossProfit, *operatingIncome, *netIncome, *EBITDA;
 	int num1;
 	getIncomeStatements(ticker, name, &revenue, &grossProfit, &operatingIncome, &netIncome, &EBITDA, &num1);
-	
+
 	double *currentRatio, *debtEquityRatio, *grossMargin, *netProfit, *inventoryTurnoverRatio; 
 	int num2;
 	getKeyRatios(ticker, name, &currentRatio, &debtEquityRatio, &grossMargin, &netProfit, &inventoryTurnoverRatio, &num2);
 
-
+	
 
 
 
